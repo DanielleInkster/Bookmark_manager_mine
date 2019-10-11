@@ -1,3 +1,9 @@
+
+<style>
+ a { display: inline; }
+ form { display: inline; }
+</style>
+  
 <ul>
   <% @bookmarks.each do |bookmark| %>
     <li class="bookmark" id="bookmark-<%= bookmark.id %>">
@@ -14,3 +20,6 @@
     </li>
   <% end %>
 </ul>
+<p>
+  <%= flash[:notice] %>
+</p>

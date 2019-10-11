@@ -1,4 +1,4 @@
-require 'database_connection'
+require_relative 'database_connection'
 require 'uri' #URI is a module providing classes to handle Uniform Resource Identifiers 
 class Bookmark
 
@@ -22,6 +22,7 @@ class Bookmark
     end
 
   def self.create(url:, title:)
+    return false unless is_url?(url)
     result = DatabaseConnection.query("INSERT INTO bookmarks (url, title) VALUES('#{url}', '#{title}') RETURNING id, title, url;")
     Bookmark.new(id: result[0]['id'], title: result[0]['title'], url: result[0]['url'])
   end
@@ -41,4 +42,10 @@ class Bookmark
     Bookmark.new(id: result[0]['id'], title: result[0]['title'], url: result[0]['url'])
   end
   
+  # private
+
+  def self.is_url?(url)
+    url =~ /\A#{URI::regexp(['http', 'https'])}\z/
+  end
+
 end
